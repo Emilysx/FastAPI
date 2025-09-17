@@ -6,7 +6,7 @@ from typing import Optional, Any
 app = FastAPI(
     title="API - Como Treinar o Seu Dragão",
     version="1.0.0",
-    description="API - Como Treinar o seu Dragão - Feita com FastAPI"
+    description="API - Como Treinar o seu Dragão - Feita com FastAPI e pela Emily Gabrielle DS18 ",
 )
 
 # Criação de um banco de dados FAKE 
@@ -108,9 +108,9 @@ personagens = {
         "foto": "https://i.pinimg.com/736x/2d/f0/d8/2df0d83a9009032c70aa4e9556d15cd9.jpg"
     },
 }
-
+####################################### DRAGÕES #############################################################
 # Rota para listar os Dragões 
-@app.get("/dragoes")
+@app.get("/dragoes",  summary="Lista todos os Dradão")
 async def get_dragoes(db: Any = Depends(fake_bd)):
     return dragoes
 
@@ -123,9 +123,36 @@ async def get_dragao_por_id(dragao_id: int):
     except KeyError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Dragão não encontado")
     
+# Cadastrar um Dragão
+@app.post("/dragoes", status_code=status.HTTP_201_CREATED, summary="Cadastra um Dradão")
+async def post_dragao(dragao: Optional[Dragoes] = None):
+    next_id = len(dragoes) + 1
+    dragoes[next_id] = dragao.dict()
+    del dragoes[next_id]["id"]  # remove o id enviado no body
+    return dragoes[next_id]
 
+# Atualizar um Dragão
+@app.put("/dragoes/{dragao_id}", status_code=status.HTTP_202_ACCEPTED, summary="Atualiza um Dragão")
+async def put_dragao(dragao_id: int, dragao: Dragoes):
+    if dragao_id in dragoes:
+        dragoes[dragao_id] = dragao.dict()  # substitui os dados antigos pelos novos
+        return dragoes[dragao_id]
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Dragão não encontrado")
+
+# Remover um Dragão
+@app.delete("/dragoes/{dragao_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Remove um Dragão")
+async def delete_dragao(dragao_id: int):
+    if dragao_id in dragoes:
+        del dragoes[dragao_id]
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Dragão não encontrado")
+    
+
+####################################### PERSONAGENS #############################################################
 # Rota para listar os Personagens
-@app.get("/personagens")
+@app.get("/personagens", summary="Lista todos os Personagens")
 async def get_personagens(db: Any = Depends(fake_bd)):
     return personagens
 
@@ -137,15 +164,33 @@ async def get_dragao_por_id(personagem_id: int):
         return personagem
     except KeyError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Personagem não encontado")
-
+    
 # Cadastrar um Personagem #ARRUMAR
-@app.post("/personagens", status_code=status.HTTP_201_CREATED)
-async def post_personagem(personagem: Optional[Personagens] = None):
-    next_id = len(personagens) + 1 
-    personagens[next_id] = personagem
-    del personagem.id
-    return personagem
+@app.post("/personagens", status_code=status.HTTP_201_CREATED, summary="Cadastra um Personagem")
+async def post_personagem(personagem: Personagens):
+    next_id = len(personagens) + 1
+    personagens[next_id] = personagem.dict()
+    personagens[next_id].pop("id", None)  # remove o id enviado no body (se existir)
+    return personagens[next_id]
 
+# Atualizar um Personagem
+@app.put("/personagens/{personagem_id}", status_code=status.HTTP_202_ACCEPTED, summary="Atualiza um Personagem")
+async def put_personagem(personagem_id: int, personagem: Personagens):
+    if personagem_id in personagens:
+        personagens[personagem_id] = personagem.dict()  # substitui os dados antigos pelos novos
+        return personagens[personagem_id]
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Personagem não encontrado")
+
+
+# Remover um Personagem
+@app.delete("/personagens/{personagem_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Remove um Personagem")
+async def delete_personagem(personagem_id: int):
+    if personagem_id in personagens:
+        del personagens[personagem_id]
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Personagem não encontrado")
 
 
 if __name__ == "__main__":
