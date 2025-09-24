@@ -8,7 +8,8 @@ engine: AsyncEngine = create_async_engine(settings.BD_URL)
 Session:  AsyncEngine = sessionmaker(
     autocommit = False,
     autoflush = False,
-    expire_ = AsyncSession,
+    expire_on_commit=False,
+    class_= AsyncSession,
     bind = engine
 )
 

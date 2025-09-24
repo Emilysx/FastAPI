@@ -6,12 +6,11 @@ async def create_tables() -> None:
     print("Criando ateblas no bando de dados")
 
     async with engine.begin() as conn:
-        await conn.run_sync(settings.DBBaseModel.matadata.drop_all)
+        await conn.run_sync(settings.DBBaseModel.metadata.drop_all)
 
-        await conn.run_sync(settings.DBBaseModel.matadata.create_all)
+        await conn.run_sync(settings.DBBaseModel.metadata.create_all)
 
     print ("Tabelas Criadas com sucesso!")
-
 
 if __name__ == "__main__":
     import asyncio

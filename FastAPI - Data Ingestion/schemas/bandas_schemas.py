@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel as SCBasModel
 
-class BandasSchama(SCBasModel):
+class BandasSchema(SCBasModel):
 
     id: Optional[int] = None
     nome: str
