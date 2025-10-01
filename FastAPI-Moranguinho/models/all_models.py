@@ -1,0 +1,2 @@
+from models.personagens_model import Personagem
+from models.aventura_model import Aventura
