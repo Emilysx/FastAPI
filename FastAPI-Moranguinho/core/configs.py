@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
 
     # URL de conexão com o banco de dados.
-    BD_URL: str = "mysql+asyncmy://root@127.0.0.1:3306/moranguinho" # porta que o xampp está usando e o nome do bando
+    BD_URL: str = "mysql+asyncmy://root@127.0.0.1:3306/moranguinho" # porta que o xampp está usando e o nome do banco
 
     DBBaseModel = declarative_base()
 

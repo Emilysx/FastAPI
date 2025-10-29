@@ -1,15 +1,15 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from core.database import DBBaseModel  # BaseModel para herdar os recursos do SQLAlchemy
+from core.configs import settings  # BaseModel para herdar os recursos do SQLAlchemy
 
-class Personagem(DBBaseModel):
+class Personagem(settings.DBBaseModel):
     __tablename__ = 'personagens'  # Nome da tabela no banco de dados
 
     id = Column(Integer, primary_key=True, index=True)  # Chave primária para identificar o personagem
-    nome = Column(String, index=True)  
+    nome = Column(String(255), index=True) 
     idade = Column(Integer) 
-    fruta = Column (String)
-    descricao = Column(String)
+    fruta = Column(String(255)) 
+    descricao = Column(String(255)) 
 
     # Relacionamento com a tabela de Aventuras (um personagem pode participar de várias aventuras)
     aventuras = relationship("Aventura", back_populates="personagem")

@@ -1,6 +1,6 @@
 from core.configs import settings  # configurações, como a base do banco de dados
 from core.database import engine 
-from models import __all_models  # Importa todos os modelos para garantir que sejam registrados
+from models import all_models  # Importa todos os modelos para garantir que sejam registrados
 
 # Função assíncrona para criar as tabelas
 async def create_tables() -> None:
